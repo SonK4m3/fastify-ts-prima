@@ -29,3 +29,19 @@ model Product {
   owner    User     @relation(fields: [ownerId], references: [id])
   ownerId  Int
 }
+
+model BookLanguage {
+  id           Int    @id @default(autoincrement())
+  languageCode String @db.VarChar(25)
+  languageName String @db.VarChar(255)
+  books        Book[]
+}
+
+model Book {
+  id              Int          @id @default(autoincrement())
+  title           String       @db.VarChar(255)
+  numberPages     Int
+  publicationDate DateTime
+  language        BookLanguage @relation(fields: [languageId], references: [id])
+  languageId      Int
+}
