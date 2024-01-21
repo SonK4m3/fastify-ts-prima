@@ -4,6 +4,8 @@ import userRoutes from "./modules/user/user.route";
 import productRoutes from "./modules/product/product.route";
 import { userSchemas } from "./modules/user/user.schema";
 import { productSchemas } from "./modules/product/product.schema";
+import { bookSchemas } from "./modules/book/book.schema";
+import { bookRoutes } from "./modules/book/book.route";
 
 export const server = fastify();
 
@@ -82,12 +84,13 @@ server.get("/ping", (request, reply) => {
   return "pong\n";
 });
 
-for (const schema of [...userSchemas, ...productSchemas]) {
+for (const schema of [...userSchemas, ...productSchemas, ...bookSchemas]) {
   server.addSchema(schema);
 }
 
 server.register(userRoutes, { prefix: "api/users" });
 server.register(productRoutes, { prefix: "api/products" });
+server.register(bookRoutes, { prefix: "api/books" });
 
 server.listen({ port: 8080, host: "127.0.0.1" }, (err, address) => {
   if (err) {
