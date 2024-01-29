@@ -92,7 +92,7 @@ server.register(userRoutes, { prefix: "api/users" });
 server.register(productRoutes, { prefix: "api/products" });
 server.register(bookRoutes, { prefix: "api/books" });
 
-server.listen({ port: 8080, host: "127.0.0.1" }, (err, address) => {
+server.listen({ port: 8080, host: "0.0.0.0" }, (err, address) => {
   if (err) {
     console.log(err);
     process.exit(1);
