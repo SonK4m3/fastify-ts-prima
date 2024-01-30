@@ -1,13 +1,10 @@
-import fastify, { FastifyReply, FastifyRequest } from "fastify";
+import fastify, { FastifyReply, FastifyRequest, errorCodes } from "fastify";
 import fastifyJwt from "@fastify/jwt";
-import userRoutes from "./modules/user/user.route";
-import productRoutes from "./modules/product/product.route";
-import { userSchemas } from "./modules/user/user.schema";
-import { productSchemas } from "./modules/product/product.schema";
-import { bookSchemas } from "./modules/book/book.schema";
-import { bookRoutes } from "./modules/book/book.route";
+import routes from "./routes";
 
-export const server = fastify();
+export const server = fastify({
+  logger: false,
+});
 
 declare module "fastify" {
   export interface FastifyInstance {
@@ -40,57 +37,16 @@ server.decorate(
   }
 );
 
-interface IQuerystring {
-  username: string;
-  password: string;
-}
-
-interface IHeaders {
-  "h-Custom": string;
-}
-
-interface IReply {
-  200: { success: boolean };
-  302: { url: string };
-  "4xx": { error: string };
-}
-
-server.get("/healthcheck", async () => {
-  return {
-    status: "OK",
-  };
-});
-
-server.get<{
-  Querystring: IQuerystring;
-  Headers: IHeaders;
-  Reply: IReply;
-}>(
-  "/auth",
-  {
-    preValidation: (request, reply, done) => {
-      const { username, password } = request.query;
-      done(username !== "admin" ? new Error("Must be admin") : undefined);
-    },
-  },
-  async (request, reply) => {
-    const customerHeader = request.headers["h-Custom"];
-
-    reply.status(200).send({ success: true });
+server.setErrorHandler((error, request, reply) => {
+  if (error instanceof errorCodes.FST_ERR_BAD_STATUS_CODE) {
+    server.log.error(error);
+    reply.status(500).send({ message: "Server internal error!" });
+  } else {
+    reply.send(error);
   }
-);
-
-server.get("/ping", (request, reply) => {
-  return "pong\n";
 });
 
-for (const schema of [...userSchemas, ...productSchemas, ...bookSchemas]) {
-  server.addSchema(schema);
-}
-
-server.register(userRoutes, { prefix: "api/users" });
-server.register(productRoutes, { prefix: "api/products" });
-server.register(bookRoutes, { prefix: "api/books" });
+server.register(routes, { prefix: "/api" });
 
 server.listen({ port: 8080, host: "0.0.0.0" }, (err, address) => {
   if (err) {
