@@ -8,6 +8,7 @@ const userCore = {
     })
     .email(),
   name: z.string(),
+  role: z.string(),
 };
 
 const createUserSchema = z.object({

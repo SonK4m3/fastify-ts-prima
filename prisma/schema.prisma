@@ -17,6 +17,7 @@ model User {
   password String
   salt     String
   products Product[]
+  role     String
 }
 
 model Product {
