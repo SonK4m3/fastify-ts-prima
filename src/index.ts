@@ -1,14 +1,24 @@
-import fastify, { FastifyReply, FastifyRequest, errorCodes } from 'fastify';
-import fastifyJwt from '@fastify/jwt';
+import fastify, { errorCodes } from 'fastify';
 import routes from './routes';
+import authenticatePlugin from './plugins/authenticate.plugin';
+import authorizationPlugin from './plugins/authorization.plugin';
 
 export const server = fastify({
   logger: false,
 });
 
 declare module 'fastify' {
+  type Authenticate = (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+
+  type Authorize = (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+
   export interface FastifyInstance {
-    authenticate: any;
+    authenticate: Authenticate;
+    authorize: any;
+  }
+
+  interface FastifyContextConfig {
+    allowedRoles?: string[];
   }
 }
 
@@ -22,18 +32,14 @@ interface User {
 }
 
 declare module '@fastify/jwt' {
-  interface FastifyJWT {
+  export interface FastifyJWT {
     user: User;
   }
 }
 
-server.register(fastifyJwt, {
-  secret: 'sonkameSecret',
-});
-
-server.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
-  await request.jwtVerify();
-});
+// plugins
+server.register(authenticatePlugin);
+server.register(authorizationPlugin);
 
 server.setErrorHandler((error, request, reply) => {
   if (error instanceof errorCodes.FST_ERR_BAD_STATUS_CODE) {

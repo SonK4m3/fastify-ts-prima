@@ -19,7 +19,12 @@ const routes = async (server: FastifyInstance) => {
   server.addHook('onRequest', async (request: FastifyRequest<{}>, reply) => {
     const routePath = request.routeOptions.url;
 
-    if (routePath === '/api/users/login' && request.raw.method === 'POST') {
+    const nonAuthenticatedRoutes: { route: string; method?: string }[] = [
+      { route: '/api/users/login', method: 'POST' },
+      { route: '/api/users', method: 'POST' },
+    ];
+
+    if (nonAuthenticatedRoutes.some((it) => it.route === routePath && it.method === request.raw.method)) {
       return;
     }
 
@@ -30,12 +35,8 @@ const routes = async (server: FastifyInstance) => {
   // register sub-routes
   server.register(fooRoutes, { prefix: '/foo' });
   server.register(userRoutes, { prefix: '/users' });
-  server.register(productRoutes, { prefix: '/products', roles: ['admin'] });
-  server.register(bookRoutes, { prefix: '/books', roles: ['user'] });
-};
-
-const hasRequiredRoles = (userRoles: string[], requiredRoles: string[]): boolean => {
-  return requiredRoles.every((role) => userRoles.includes(role));
+  server.register(productRoutes, { prefix: '/products' });
+  server.register(bookRoutes, { prefix: '/books' });
 };
 
 export default routes;

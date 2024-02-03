@@ -9,6 +9,10 @@ async function productRoutes(server: FastifyInstance) {
     {
       // preHandler: [server.authenticate],
       schema: { body: $ref('createProductSchema'), response: { 201: $ref('productsResponseSchema') } },
+      config: {
+        allowedRoles: ['admin'],
+      },
+      preHandler: [server.authorize],
     },
     (request: FastifyRequest<{ Body: CreateProductInput }>, reply: FastifyReply) =>
       productController.createProductHandler(request, reply),
