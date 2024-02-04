@@ -1,6 +1,6 @@
 import BookRepository from '../repositories/book.repository';
 import { convertToISO8601 } from '../utils/formater';
-import prisma from '../utils/prisma';
+import prisma from '../prisma';
 import { CreateBookInput, CreateBookLanguageInput } from '../validators/book.schema';
 
 class BookService {
