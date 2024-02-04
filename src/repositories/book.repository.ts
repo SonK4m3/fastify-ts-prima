@@ -1,4 +1,4 @@
-import prisma from '../utils/prisma';
+import prisma from '../prisma';
 import { CreateBookInput, CreateBookLanguageInput } from '../validators/book.schema';
 
 class BookRepository {

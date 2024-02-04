@@ -1,4 +1,4 @@
-import prisma from '../utils/prisma';
+import prisma from '../prisma';
 import { CreateProductInput } from '../validators/product.schema';
 
 class ProductRepository {

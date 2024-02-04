@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { CreateBookInput, CreateBookLanguageInput } from '../validators/book.schema';
 import BookRepository from '../repositories/book.repository';
-import BookService from '../services/book.service';
+import BookService from '../services/book.services';
 
 const bookRepository: BookRepository = new BookRepository();
 const bookService: BookService = new BookService(bookRepository);

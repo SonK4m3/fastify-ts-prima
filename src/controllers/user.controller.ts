@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { CreateUserInput, LoginInput } from '../validators/user.schema';
 import { verifyPassword } from '../utils/hash';
 import UserRepository from '../repositories/user.repository';
-import UserService from '../services/user.service';
+import UserService from '../services/user.services';
 
 const userRepository: UserRepository = new UserRepository();
 const userService: UserService = new UserService(userRepository);

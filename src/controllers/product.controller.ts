@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { CreateProductInput } from '../validators/product.schema';
-import ProductService from '../services/product.service';
+import ProductService from '../services/product.services';
 import ProductRepository from '../repositories/product.repository';
 
 const productRepository: ProductRepository = new ProductRepository();
