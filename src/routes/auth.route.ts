@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import UserController from '../controllers/user.controller';
+import UserController from '../controllers/auth.controller';
 import { $ref, CreateUserInput, LoginInput } from '../validators/user.schema';
 
 const userController = new UserController();

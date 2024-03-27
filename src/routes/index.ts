@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
-import userRoutes from './user.route';
+import authRoutes from './auth.route';
 
 import { userSchemas } from '../validators/user.schema';
 import fooRoutes from './foo.route';
@@ -16,8 +16,8 @@ const routes = async (server: FastifyInstance) => {
     const routePath = request.routeOptions.url;
 
     const nonAuthenticatedRoutes: { route: string; method?: string }[] = [
-      { route: '/api/users/login', method: 'POST' },
-      { route: '/api/users', method: 'POST' },
+      { route: '/api/auth/login', method: 'POST' },
+      { route: '/api/auth', method: 'POST' },
     ];
 
     if (nonAuthenticatedRoutes.some((it) => it.route === routePath && it.method === request.raw.method)) {
@@ -30,7 +30,7 @@ const routes = async (server: FastifyInstance) => {
 
   // register sub-routes
   server.register(fooRoutes, { prefix: '/foo' });
-  server.register(userRoutes, { prefix: '/users' });
+  server.register(authRoutes, { prefix: '/auth' });
 };
 
 export default routes;
