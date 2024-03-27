@@ -1,48 +1,160 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model User {
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model cdr {
+  id                   Int     @default(autoincrement())
+  uuid                 String  @db.VarChar(255)
+  site_id              Int?
+  dial_number          String  @db.VarChar(255)
+  extension            String? @db.VarChar(255)
+  msisdn               String  @db.VarChar(255)
+  answer_state         String? @default("answered") @db.VarChar(255)
+  customer_state       String? @db.VarChar(255)
+  call_direction       String? @db.VarChar(255)
+  uuid_map             String? @db.VarChar(255)
+  transferred          Int?    @default(0)
+  msisdn_digits        String? @db.VarChar(255)
+  agent_digits         String? @db.VarChar(255)
+  xml_path             String? @db.VarChar(255)
+  recording_path       String? @db.VarChar(255)
+  client_id            Int?
+  lat                  String? @db.VarChar(255)
+  lng                  String? @db.VarChar(255)
+  location             String? @db.VarChar(255)
+  location_tolerance   String? @db.VarChar(255)
+  autocall_campaign_id Int?
+  address              String? @db.VarChar(255)
+  tapping_id           Int?
+  status               Int?    @default(0)
+  call_length          BigInt? @default(0) @db.UnsignedBigInt
+  start_timestamp      String? @db.VarChar(255)
+  ring_timestamp       String? @db.VarChar(255)
+  answer_timestamp     String? @db.VarChar(255)
+  end_timestamp        String? @db.VarChar(255)
+  created_at           Int
+  created_by           Int?
+  updated_at           Int?
+  updated_by           Int?
+  is_spam              Int?    @default(0)
+  disposition          String? @db.VarChar(255)
+  early_to_time        Int?    @default(0)
+  talk_time            Int?    @default(0)
+  call_wait            Int?    @default(0)
+
+  @@id([id, uuid, created_at])
+  @@index([dial_number, call_direction], map: "cdr_dial_number_IDX")
+  @@index([is_spam, dial_number, msisdn, site_id], map: "cdr_is_spam_IDX")
+  @@index([site_id, call_direction, dial_number, msisdn, transferred, is_spam], map: "cdr_site_id_IDX")
+  @@index([uuid, site_id], map: "cdr_uuid_IDX")
+  @@index([client_id], map: "idx_client_id")
+  @@index([msisdn], map: "idx_msisdn")
+  @@index([msisdn, dial_number], map: "idx_msisdn_dial_number")
+  @@index([dial_number, msisdn, customer_state, call_direction, transferred, is_spam, site_id], map: "idx_report")
+  @@index([site_id, autocall_campaign_id], map: "idx_site_campaign")
+  @@index([site_id], map: "idx_site_id")
+  @@index([uuid, id, site_id, dial_number], map: "idx_uuid")
+  @@index([uuid], map: "idx_uuid_pri")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model cdr_bk {
+  id                   Int     @default(autoincrement())
+  uuid                 String  @db.VarChar(255)
+  site_id              Int?
+  dial_number          String  @db.VarChar(255)
+  extension            String? @db.VarChar(255)
+  msisdn               String  @db.VarChar(255)
+  answer_state         String? @default("answered") @db.VarChar(255)
+  customer_state       String? @db.VarChar(255)
+  call_direction       String? @db.VarChar(255)
+  uuid_map             String? @db.VarChar(255)
+  transferred          Int?    @default(0)
+  msisdn_digits        String? @db.VarChar(255)
+  agent_digits         String? @db.VarChar(255)
+  xml_path             String? @db.VarChar(255)
+  recording_path       String? @db.VarChar(255)
+  client_id            Int?
+  lat                  String? @db.VarChar(255)
+  lng                  String? @db.VarChar(255)
+  location             String? @db.VarChar(255)
+  location_tolerance   String? @db.VarChar(255)
+  autocall_campaign_id Int?
+  address              String? @db.VarChar(255)
+  tapping_id           Int?
+  status               Int?    @default(0)
+  call_length          BigInt? @default(0) @db.UnsignedBigInt
+  start_timestamp      String? @db.VarChar(255)
+  ring_timestamp       String? @db.VarChar(255)
+  answer_timestamp     String? @db.VarChar(255)
+  end_timestamp        String? @db.VarChar(255)
+  created_at           Int
+  created_by           Int?
+  updated_at           Int?
+  updated_by           Int?
+  is_spam              Int?    @default(0)
+  disposition          String? @db.VarChar(255)
+  early_to_time        Int?    @default(0)
+  talk_time            Int?    @default(0)
+  call_wait            Int?    @default(0)
+
+  @@id([id, uuid, created_at])
+  @@index([dial_number, call_direction], map: "cdr_dial_number_IDX")
+  @@index([is_spam, dial_number, msisdn, site_id], map: "cdr_is_spam_IDX")
+  @@index([site_id, call_direction, dial_number, msisdn, transferred, is_spam], map: "cdr_site_id_IDX")
+  @@index([uuid, site_id], map: "cdr_uuid_IDX")
+  @@index([client_id], map: "idx_client_id")
+  @@index([msisdn], map: "idx_msisdn")
+  @@index([msisdn, dial_number], map: "idx_msisdn_dial_number")
+  @@index([dial_number, msisdn, customer_state, call_direction, transferred, is_spam, site_id], map: "idx_report")
+  @@index([site_id, autocall_campaign_id], map: "idx_site_campaign")
+  @@index([site_id], map: "idx_site_id")
+  @@index([uuid, id, site_id, dial_number], map: "idx_uuid")
+  @@index([uuid], map: "idx_uuid_pri")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model medical_ticket {
+  id                     Int     @default(autoincrement()) @db.UnsignedInt
+  caller_number          String? @db.VarChar(16)
+  caller_name            String? @db.VarChar(255)
+  call_id                Int?    @db.UnsignedInt
+  actor_id               Int?    @db.UnsignedInt
+  patient_information_id Int?    @db.UnsignedInt
+  patient_status_id      Int?    @db.UnsignedInt
+  emergency_reason_id    Int?    @default(0) @db.UnsignedInt
+  description            String? @db.Text
+  ticket_status          Int?    @default(0) @db.UnsignedTinyInt
+  patient_quantity       Int?    @db.UnsignedInt
+  pickup_address         String? @db.VarChar(500)
+  lat                    String? @db.VarChar(50)
+  lng                    String? @db.VarChar(50)
+  emergency_type         Int?    @default(0) @db.UnsignedTinyInt
+  status                 Int?    @default(1) @db.UnsignedTinyInt
+  created_by             Int?
+  updated_by             Int?
+  created_at             Int
+  updated_at             Int?
+  user_id_11x            Int?
+  username_11x           String? @db.VarChar(255)
+  article_medical_id     Int?
+  created_at_11x         Int?
+  district               Int?
+
+  @@id([id, created_at])
+}
+
+model user {
   id       Int       @id @default(autoincrement())
   email    String    @unique
   name     String?
   password String
   salt     String
-  products Product[]
   role     String
-}
-
-model Product {
-  id       Int      @id @default(autoincrement())
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
-  title    String   @db.VarChar(255)
-  content  String?
-  price    Float
-  owner    User     @relation(fields: [ownerId], references: [id])
-  ownerId  Int
-}
-
-model BookLanguage {
-  id           Int    @id @default(autoincrement())
-  languageCode String @db.VarChar(25)
-  languageName String @db.VarChar(255)
-  books        Book[]
-}
-
-model Book {
-  id              Int          @id @default(autoincrement())
-  title           String       @db.VarChar(255)
-  numberPages     Int
-  publicationDate DateTime
-  language        BookLanguage @relation(fields: [languageId], references: [id])
-  languageId      Int
 }
