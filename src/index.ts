@@ -52,7 +52,10 @@ server.setErrorHandler((error, request, reply) => {
 
 server.register(routes, { prefix: '/api' });
 
-server.listen({ port: 8080, host: '0.0.0.0' }, (err, address) => {
+const PORT = Number(process.env.PORT) || 8080;
+const HOST = process.env.HOST || 'localhost';
+
+server.listen({ port: PORT, host: HOST }, (err, address) => {
   if (err) {
     console.log(err);
     process.exit(1);
