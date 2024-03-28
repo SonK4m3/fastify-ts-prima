@@ -42,7 +42,7 @@ declare module '@fastify/jwt' {
 server.register(authenticatePlugin);
 server.register(authorizationPlugin);
 server.register(corsPlugin, {
-  origin: ['http://127.0.0.1:3030'],
+  origin: [String(process.env.ORIGIN)],
   methods: ['GET', 'POST', 'PUT'],
 });
 
