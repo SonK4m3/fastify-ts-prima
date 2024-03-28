@@ -2,6 +2,7 @@ import fastify, { errorCodes } from 'fastify';
 import routes from './routes';
 import authenticatePlugin from './plugins/authenticate.plugin';
 import authorizationPlugin from './plugins/authorization.plugin';
+import corsPlugin from './plugins/cors.plugin';
 
 export const server = fastify({
   logger: false,
@@ -40,6 +41,10 @@ declare module '@fastify/jwt' {
 // plugins
 server.register(authenticatePlugin);
 server.register(authorizationPlugin);
+server.register(corsPlugin, {
+  origin: ['http://127.0.0.1:3030'],
+  methods: ['GET', 'POST', 'PUT'],
+});
 
 server.setErrorHandler((error, request, reply) => {
   if (error instanceof errorCodes.FST_ERR_BAD_STATUS_CODE) {
