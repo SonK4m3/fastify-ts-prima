@@ -17,7 +17,7 @@ const routes = async (server: FastifyInstance) => {
 
     const nonAuthenticatedRoutes: { route: string; method?: string }[] = [
       { route: '/api/auth/login', method: 'POST' },
-      { route: '/api/auth', method: 'POST' },
+      { route: '/api/auth/signup', method: 'POST' },
     ];
 
     if (nonAuthenticatedRoutes.some((it) => it.route === routePath && it.method === request.raw.method)) {

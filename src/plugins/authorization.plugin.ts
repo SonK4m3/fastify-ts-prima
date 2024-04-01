@@ -6,6 +6,7 @@ export default fastifyPlugin<FastifyAuthPluginOptions>(async (fastify: FastifyIn
   fastify.register(fastifyAuth);
 
   fastify.decorate('authorize', async (request: FastifyRequest, reply: FastifyReply) => {
+    // declare type in src/index.ts line 23
     const allowedRoles = request.routeOptions.config.allowedRoles;
 
     if (allowedRoles && request.user) {

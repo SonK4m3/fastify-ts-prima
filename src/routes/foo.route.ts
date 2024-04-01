@@ -35,8 +35,41 @@ const fooRoutes = async (server: FastifyInstance) => {
       }>,
       reply,
     ) => {
-      const id = request.query.id;
-      reply.send({ param: id });
+      reply.send({ user: request.user, queryString: request.query.id, params: request.params });
+    },
+  );
+
+  server.get(
+    '/admin/param/:ids',
+    {
+      schema: {
+        querystring: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'number',
+            },
+          },
+          required: ['id'],
+        },
+      },
+      config: {
+        allowedRoles: ['admin'],
+      },
+      preHandler: [server.authorize],
+    },
+    (
+      request: FastifyRequest<{
+        Params: {
+          ids: number;
+        };
+        Querystring: {
+          id: number;
+        };
+      }>,
+      reply,
+    ) => {
+      reply.send({ user: request.user, queryString: request.query.id, params: request.params });
     },
   );
 };
