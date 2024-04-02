@@ -5,6 +5,9 @@ import { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify';
 export default fastifyPlugin<FastifyJWTOptions>(async (fastify: FastifyInstance) => {
   fastify.register(fastifyJwt, {
     secret: String(process.env.JWT_SECRET),
+    sign: {
+      expiresIn: String(process.env.JWT_EXPIRATION),
+    },
   });
 
   fastify.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
