@@ -19,7 +19,7 @@ declare module 'fastify' {
   }
 
   interface FastifyContextConfig {
-    allowedRoles?: string[];
+    allowedRoles?: Array<Role>;
   }
 }
 
