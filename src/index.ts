@@ -38,6 +38,16 @@ declare module '@fastify/jwt' {
   }
 }
 
+declare global {
+  interface BigInt {
+    toJSON(): string;
+  }
+}
+
+BigInt.prototype.toJSON = function () {
+  return this.toString();
+};
+
 // plugins
 server.register(authenticatePlugin);
 server.register(authorizationPlugin);
