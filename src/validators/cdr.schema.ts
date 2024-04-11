@@ -60,6 +60,7 @@ const cdrResponseSchema = z.object({
   xml_path: z.string().nullable(),
   recording_path: z.string().nullable(),
   client_id: z.number().optional(),
+  call_length: z.string(),
   start_timestamp: z.string().nullable(),
   ring_timestamp: z.string().nullable(),
   answer_timestamp: z.string().nullable(),
