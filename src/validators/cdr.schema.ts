@@ -8,6 +8,7 @@ const cdrIdSchema = z.object({
 });
 
 const cdrSchema = z.object({
+  id: z.number(),
   uuid: z.string(),
   site_id: z.number().optional(),
   dial_number: z.string(),
@@ -50,7 +51,24 @@ const cdrSchema = z.object({
   call_wait: z.number().default(0).nullable(),
 });
 
-const cdrsResponsesSchema = z.array(cdrSchema);
+const cdrResponseSchema = z.object({
+  id: z.number(),
+  uuid: z.string(),
+  created_at: z.number(),
+  dial_number: z.string(),
+  answer_state: z.string().default('answered').nullable(),
+  xml_path: z.string().nullable(),
+  recording_path: z.string().nullable(),
+  client_id: z.number().optional(),
+  start_timestamp: z.string().nullable(),
+  ring_timestamp: z.string().nullable(),
+  answer_timestamp: z.string().nullable(),
+  end_timestamp: z.string().nullable(),
+  talk_time: z.number().default(0).nullable(),
+});
+
+const cdrsSchema = z.array(cdrSchema);
+const cdrResponsesSchema = z.array(cdrResponseSchema);
 
 export type CdrIdType = z.infer<typeof cdrIdSchema>;
 export type CdrType = z.infer<typeof cdrSchema>;
@@ -59,7 +77,8 @@ export type CdrType = z.infer<typeof cdrSchema>;
 const { schemas: cdrSchemas, $ref } = buildJsonSchemas(
   {
     cdrSchema,
-    cdrsResponsesSchema,
+    cdrsSchema,
+    cdrResponsesSchema,
   },
   { $id: 'cdrSchema' },
 );

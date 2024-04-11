@@ -35,7 +35,7 @@ const cdrRoutes = async (server: FastifyInstance) => {
           required: ['start', 'limit'],
         },
         response: {
-          200: $ref('cdrsResponsesSchema'),
+          200: $ref('cdrResponsesSchema'),
         },
       },
     },
