@@ -1,12 +1,9 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import authRoutes from './auth.route';
-
 import { userSchemas } from '../validators/user.schema';
 import fooRoutes from './foo.route';
 import { cdrSchemas } from '../validators/cdr.schema';
 import cdrRoutes from './cdr.route';
-
-type Role = 'admin' | 'user';
 
 const routes = async (server: FastifyInstance) => {
   for (const schema of [...userSchemas, ...cdrSchemas]) {
