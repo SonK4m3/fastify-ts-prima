@@ -1,35 +1,31 @@
-import fastify, { errorCodes } from 'fastify';
+import fastify from 'fastify';
 import routes from './routes';
 import authenticatePlugin from './plugins/authenticate.plugin';
 import authorizationPlugin from './plugins/authorization.plugin';
 import corsPlugin from './plugins/cors.plugin';
+import { Permission, Role } from './models/role';
+import { RecordErrorHandler } from './errorHandlers/RecordErrorHandler';
+import { User } from './models/user';
 
-export const server = fastify({
+const server = fastify({
   logger: false,
 });
 
 declare module 'fastify' {
   type Authenticate = (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
 
-  type Authorize = (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
+  type Authorize = (request: FastifyRequest, reply: FastifyReply) => void;
 
   export interface FastifyInstance {
     authenticate: Authenticate;
     authorize: any;
+    permission: any;
   }
 
   interface FastifyContextConfig {
     allowedRoles?: Array<Role>;
+    permission?: Permission;
   }
-}
-
-type Role = 'admin' | 'user';
-
-interface User {
-  id: number;
-  email: string;
-  name: string;
-  role: Role;
 }
 
 declare module '@fastify/jwt' {
@@ -57,12 +53,7 @@ server.register(corsPlugin, {
 });
 
 server.setErrorHandler((error, request, reply) => {
-  if (error instanceof errorCodes.FST_ERR_BAD_STATUS_CODE) {
-    server.log.error(error);
-    reply.status(500).send({ message: 'Server internal error!' });
-  } else {
-    reply.send(error);
-  }
+  RecordErrorHandler.handle(error, request, reply);
 });
 
 server.register(routes, { prefix: '/api' });
