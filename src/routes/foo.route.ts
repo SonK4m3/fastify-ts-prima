@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 const fooRoutes = async (server: FastifyInstance) => {
   server.get('/404', (request, reply) => {
@@ -70,6 +70,45 @@ const fooRoutes = async (server: FastifyInstance) => {
       reply,
     ) => {
       reply.send({ user: request.user, queryString: request.query.id, params: request.params });
+    },
+  );
+
+  server.get(
+    '/permission/read',
+    {
+      config: {
+        permission: 'read',
+      },
+      preHandler: [server.permission],
+    },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      reply.send({ user: request.user, message: 'The user can read' });
+    },
+  );
+
+  server.get(
+    '/permission/write',
+    {
+      config: {
+        permission: 'write',
+      },
+      preHandler: [server.permission],
+    },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      reply.send({ user: request.user, message: 'The user can write' });
+    },
+  );
+
+  server.get(
+    '/permission/delete',
+    {
+      config: {
+        permission: 'delete',
+      },
+      preHandler: [server.permission],
+    },
+    (request: FastifyRequest, reply: FastifyReply) => {
+      reply.send({ user: request.user, message: 'The user can delete' });
     },
   );
 };
