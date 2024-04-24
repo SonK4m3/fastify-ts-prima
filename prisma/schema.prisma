@@ -151,10 +151,50 @@ model medical_ticket {
 }
 
 model user {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
   name     String?
   password String
   salt     String
   role     String
+}
+
+model hieuuser {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(255)
+  email    String @db.VarChar(255)
+  password String @db.VarChar(255)
+  role     String @db.VarChar(45)
+}
+
+model minhusers {
+  id       Int    @id @default(autoincrement())
+  username String @db.VarChar(255)
+  name     String @db.VarChar(255)
+  email    String @db.VarChar(255)
+  password String @db.VarChar(255)
+  role     String @db.VarChar(255)
+}
+
+model nhs_permission {
+  id                       Int                        @id @default(autoincrement())
+  name                     String                     @unique
+  nhs_permissions_on_roles nhs_permissions_on_roles[]
+}
+
+model nhs_role {
+  id                       Int                        @id @default(autoincrement())
+  name                     String                     @unique
+  nhs_permissions_on_roles nhs_permissions_on_roles[]
+}
+
+model nhs_permissions_on_roles {
+  role         nhs_role       @relation(fields: [roleId], references: [id])
+  roleId       Int
+  permission   nhs_permission @relation(fields: [permissionId], references: [id])
+  permissionId Int
+  assignedAt   DateTime       @default(now())
+  assignedBy   String
+
+  @@id([roleId, permissionId])
 }
