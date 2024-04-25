@@ -4,9 +4,12 @@ import { userSchemas } from '../validators/user.schema';
 import fooRoutes from './foo.route';
 import { cdrSchemas } from '../validators/cdr.schema';
 import cdrRoutes from './cdr.route';
+import { permissionSchemas } from '../validators/permission.schema';
+import { roleSchemas } from '../validators/role.schema';
+import rbacRoutes from './rbac';
 
 const routes = async (server: FastifyInstance) => {
-  for (const schema of [...userSchemas, ...cdrSchemas]) {
+  for (const schema of [...userSchemas, ...cdrSchemas, ...permissionSchemas, ...roleSchemas]) {
     server.addSchema(schema);
   }
 
@@ -31,6 +34,7 @@ const routes = async (server: FastifyInstance) => {
   server.register(fooRoutes, { prefix: '/foo' });
   server.register(authRoutes, { prefix: '/auth' });
   server.register(cdrRoutes, { prefix: '/cdr' });
+  server.register(rbacRoutes, { prefix: '/access' });
 };
 
 export default routes;

@@ -2,8 +2,6 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import CdrService from '../services/cdr.services';
 import CdrRepository from '../repositories/cdr.repository';
 import { CdrIdType } from '../validators/cdr.schema';
-import json from '../utils/formater';
-import { bigint, z } from 'zod';
 
 const cdrRepository: CdrRepository = new CdrRepository();
 const cdrService: CdrService = new CdrService(cdrRepository);
@@ -32,7 +30,6 @@ class CdrController {
   ) {
     const { start, limit } = request.query;
     const cdrs = await cdrService.getAllCdrs(start, limit);
-    // return json(cdrs);
     return cdrs;
   }
 }
