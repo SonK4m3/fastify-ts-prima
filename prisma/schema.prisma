@@ -179,12 +179,14 @@ model minhusers {
 model nhs_permission {
   id                       Int                        @id @default(autoincrement())
   name                     String                     @unique
+  is_active                Boolean                    @default(true)
   nhs_permissions_on_roles nhs_permissions_on_roles[]
 }
 
 model nhs_role {
   id                       Int                        @id @default(autoincrement())
   name                     String                     @unique
+  is_active                Boolean                    @default(true)
   nhs_permissions_on_roles nhs_permissions_on_roles[]
 }
 

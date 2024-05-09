@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import PermissionRoleController from '../../controllers/permissionRole.controller';
-import { $ref, CreateRoleInputType } from '../../validators/role.schema';
+import { $ref, ActiveRolesSchema, CreateRoleInputType } from '../../validators/role.schema';
 
 const permissionRoleController: PermissionRoleController = new PermissionRoleController();
 
@@ -22,11 +22,30 @@ const roleRoutes = async (server: FastifyInstance) => {
   server.get(
     '/',
     {
+      schema: {
+        response: {
+          200: $ref('roleResponsesSchema'),
+        },
+      },
       config: {
         allowedRoles: ['admin'],
       },
     },
     (request: FastifyRequest, reply: FastifyReply) => permissionRoleController.getAllRoles(request, reply),
+  );
+
+  server.put(
+    '/active',
+    {
+      schema: {
+        body: $ref('activeRolesSchema'),
+        response: {
+          200: $ref('roleResponsesSchema'),
+        },
+      },
+    },
+    (request: FastifyRequest<{ Body: ActiveRolesSchema }>, reply: FastifyReply) =>
+      permissionRoleController.activeRoles(request, reply),
   );
 
   server.post(

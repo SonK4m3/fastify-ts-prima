@@ -4,7 +4,7 @@ import RoleRepository from '../repositories/role.repository';
 import PermissionService from '../services/permission.services';
 import RoleService from '../services/role.services';
 import { CreatePermissionInputType } from '../validators/permission.schema';
-import { CreateRoleInputType } from '../validators/role.schema';
+import { ActiveRolesSchema, CreateRoleInputType } from '../validators/role.schema';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import PermissionOnRoleRepository from '../repositories/permissionOnRole.repository';
 import PermissionOnRoleService from '../services/permissionOnRole.services';
@@ -58,6 +58,16 @@ class PermissionRoleController {
       reply.send(roles);
     } catch (error) {
       throw new PrismaClientKnownRequestError('Failed to fetch role', error as any);
+    }
+  }
+
+  async activeRoles(request: FastifyRequest<{ Body: ActiveRolesSchema }>, reply: FastifyReply) {
+    try {
+      const rolesData = request.body;
+      const newRoles = await roleService.activeRole(rolesData);
+      reply.code(201).send(newRoles);
+    } catch (error) {
+      throw new PrismaClientKnownRequestError('Failed to create role', error as any);
     }
   }
 

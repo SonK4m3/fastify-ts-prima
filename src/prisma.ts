@@ -1,7 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient({
-  log: ['query', 'info'],
+  log: ['info'],
   transactionOptions: {
     isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     maxWait: 5000, // default: 2000

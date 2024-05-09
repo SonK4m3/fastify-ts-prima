@@ -1,5 +1,5 @@
 import prisma from '../prisma';
-import { CreateRoleInputType } from '../validators/role.schema';
+import { ActiveRolesSchema, CreateRoleInputType } from '../validators/role.schema';
 
 class RoleRepository {
   constructor() {}
@@ -31,6 +31,17 @@ class RoleRepository {
     return await prisma.nhs_role.delete({
       where: { id: roleId },
     });
+  }
+
+  async activeRoles(roles: ActiveRolesSchema) {
+    const updates = roles.map((role) =>
+      prisma.nhs_role.update({
+        where: { id: role.id },
+        data: { is_active: role.is_active },
+      }),
+    );
+
+    return await prisma.$transaction(updates);
   }
 }
 

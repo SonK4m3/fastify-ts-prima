@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 const permissionCore = {
   name: z.string(),
+  is_active: z.boolean(),
 };
 
 const permissionSchema = z.object({

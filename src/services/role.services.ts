@@ -1,5 +1,5 @@
 import RoleRepository from '../repositories/role.repository';
-import { CreateRoleInputType } from '../validators/role.schema';
+import { ActiveRolesSchema, CreateRoleInputType } from '../validators/role.schema';
 
 class RoleService {
   constructor(readonly roleRepository: RoleRepository) {}
@@ -14,6 +14,10 @@ class RoleService {
 
   async createRole(data: CreateRoleInputType) {
     return await this.roleRepository.createRole(data);
+  }
+
+  async activeRole(data: ActiveRolesSchema) {
+    return await this.roleRepository.activeRoles(data);
   }
 }
 
