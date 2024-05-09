@@ -23,7 +23,7 @@ const roleRoutes = async (server: FastifyInstance) => {
     '/',
     {
       config: {
-        allowedRoles: [],
+        allowedRoles: ['admin'],
       },
     },
     (request: FastifyRequest, reply: FastifyReply) => permissionRoleController.getAllRoles(request, reply),

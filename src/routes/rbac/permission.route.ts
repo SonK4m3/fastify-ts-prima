@@ -4,7 +4,7 @@ import { $ref, CreatePermissionInputType } from '../../validators/permission.sch
 
 const permissoinRoleController: PermissionRoleController = new PermissionRoleController();
 
-const roleRoutes = async (server: FastifyInstance) => {
+const permissionRoutes = async (server: FastifyInstance) => {
   server.post(
     '/',
     {
@@ -30,4 +30,4 @@ const roleRoutes = async (server: FastifyInstance) => {
   );
 };
 
-export default roleRoutes;
+export default permissionRoutes;
