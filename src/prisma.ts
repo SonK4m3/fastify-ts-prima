@@ -1,5 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ['query', 'info'],
+  transactionOptions: {
+    isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+    maxWait: 5000, // default: 2000
+    timeout: 10000, // default: 5000
+  },
+  errorFormat: 'pretty',
+});
 
 export default prisma;
