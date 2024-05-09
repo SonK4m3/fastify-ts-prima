@@ -7,6 +7,8 @@ import cdrRoutes from './cdr.route';
 import { permissionSchemas } from '../validators/permission.schema';
 import { roleSchemas } from '../validators/role.schema';
 import rbacRoutes from './rbac';
+import roleRoutes from './rbac/role.route';
+import permissionRoutes from './rbac/permission.route';
 
 const routes = async (server: FastifyInstance) => {
   for (const schema of [...userSchemas, ...cdrSchemas, ...permissionSchemas, ...roleSchemas]) {
@@ -34,7 +36,9 @@ const routes = async (server: FastifyInstance) => {
   server.register(fooRoutes, { prefix: '/foo' });
   server.register(authRoutes, { prefix: '/auth' });
   server.register(cdrRoutes, { prefix: '/cdr' });
-  server.register(rbacRoutes, { prefix: '/access' });
+  server.register(roleRoutes, { prefix: '/roles' });
+  server.register(permissionRoutes, { prefix: '/permissions' });
+  // server.register(rbacRoutes, { prefix: '/access' });
 };
 
 export default routes;
